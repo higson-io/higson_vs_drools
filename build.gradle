@@ -1,0 +1,24 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'pl.decerto'
+version = '0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.h2database:h2:1.4.196'
+    implementation 'pl.decerto:hyperon-runtime:1.6.52'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
