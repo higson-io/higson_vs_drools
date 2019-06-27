@@ -8,8 +8,8 @@ import java.util.Objects;
  * @author Maciej Główka on 25.06.2019
  */
 public class QxDto {
-	private String gender;
-	private int age;
+	private final String gender;
+	private final int age;
 	private BigDecimal qx;
 
 	public QxDto(String gender, int age) {
