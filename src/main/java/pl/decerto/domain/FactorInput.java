@@ -5,9 +5,8 @@ import java.util.List;
 import org.apache.commons.lang3.RandomUtils;
 
 public class FactorInput {
-
-	private static final List<String> PRODUCTS = List.of("ULA", "ULP", "ULS", "MISSING_IDENTIFIED");
-	private static final List<String> COVERS = List.of("COV1", "COV2", "COV3", "COV4", "MISSING_COV");
+	private static final List<String> PRODUCTS = List.of("ULA", "ULP", "ULS");
+	private static final List<String> COVERS = List.of("COV1", "COV2", "COV3", "COV4");
 
 	private final String product;
 	private final String cover;
@@ -21,11 +20,11 @@ public class FactorInput {
 		this.year = year;
 	}
 
-	public static FactorInput random() {
+	public static FactorInput random(int testCase) {
 		return new FactorInput(
 			RandomListUtil.getRandomStringFor(PRODUCTS),
 			RandomListUtil.getRandomStringFor(COVERS),
-			RandomUtils.nextInt(0, 301),
+			RandomUtils.nextInt(0, testCase == 1 ? 300 : 301),
 			RandomUtils.nextInt(1, 5));
 	}
 

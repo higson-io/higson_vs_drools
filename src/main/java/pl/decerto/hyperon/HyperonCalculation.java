@@ -2,54 +2,31 @@ package pl.decerto.hyperon;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang3.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.smartparam.engine.core.output.ParamValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import pl.decerto.algorithm.CalculationTemplate;
 import pl.decerto.domain.FactorInput;
 import pl.decerto.domain.QxProbabilityInput;
 import pl.decerto.hyperon.runtime.core.HyperonContext;
 import pl.decerto.hyperon.runtime.core.HyperonEngine;
 
 @Service
-public class HyperonCalculation {
-
-	private static final Logger log = LoggerFactory.getLogger(HyperonCalculation.class);
-
+public class HyperonCalculation extends CalculationTemplate {
 	private final HyperonEngine engine;
-	private final int calculationsNumber;
+	private final int testCase;
 
 	@Autowired
-	public HyperonCalculation(HyperonEngine engine, @Value("${calculations.number:100}") int calculationsNumber) {
+	public HyperonCalculation(HyperonEngine engine, @Value("${calculations.number:100}") int calculationsNumber, @Value("${test.case:1}") int testCase) {
+		super(calculationsNumber);
 		this.engine = engine;
-		this.calculationsNumber = calculationsNumber;
+		this.testCase = testCase;
 	}
 
-	public void massiveCalculations() {
-
-		StopWatch stopWatch = new StopWatch();
-
-		log.info("Start massive calculations");
-		stopWatch.start();
-		for (int i = 0; i < calculationsNumber; i++) {
-			BigDecimal qxProbability = getQxProbability();
-			BigDecimal factor = getFactor();
-
-			BigDecimal result = qxProbability.multiply(factor);
-
-			log.info("qxProbability: {}, factor: {}, result: {}", qxProbability, factor, result);
-		}
-		stopWatch.stop();
-		log.info("End massive calculations with: {}", stopWatch);
-	}
-
-	private BigDecimal getFactor() {
-
-		FactorInput input = FactorInput.random();
+	protected BigDecimal getFactor() {
+		FactorInput input = FactorInput.random(testCase);
 
 		HyperonContext context = new HyperonContext()
 			.set("policy.productCode", input.getProduct())
@@ -57,12 +34,12 @@ public class HyperonCalculation {
 			.set("policy.insured.professionCode", input.getProfessionCode())
 			.set("policy.year", input.getYear());
 
-		ParamValue multiValues = engine.get("acme.ul.rate_adjustment", context);
+		ParamValue multiValues = engine.get(testCase == 1 ? "acme.ul.rate_adjustment_no_asterisk" : "acme.ul.rate_adjustment", context);
+
 		return multiValues.getBigDecimal();
 	}
 
-	private BigDecimal getQxProbability() {
-
+	protected BigDecimal getQxProbability() {
 		QxProbabilityInput input = QxProbabilityInput.random();
 
 		HyperonContext context = new HyperonContext()
@@ -70,7 +47,7 @@ public class HyperonCalculation {
 			.set("policy.insured.age", input.getAge());
 
 		ParamValue multiValues = engine.get("acme.ul.lifetable.qx", context);
+
 		return multiValues.getBigDecimal();
 	}
-
 }
