@@ -27,7 +27,7 @@ public class DroolsCalculation extends CalculationTemplate {
 	}
 
 	protected BigDecimal getFactor() {
-		FactorInput input = FactorInput.random(testCase);
+		FactorInput input = FactorInput.random();
 
 		RateAdjustmentDto ra = new RateAdjustmentDto(input.getProduct(), input.getCover(), input.getProfessionCode(), input.getYear());
 

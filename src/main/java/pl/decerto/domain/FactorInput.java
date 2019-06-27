@@ -20,11 +20,11 @@ public class FactorInput {
 		this.year = year;
 	}
 
-	public static FactorInput random(int testCase) {
+	public static FactorInput random() {
 		return new FactorInput(
 			RandomListUtil.getRandomStringFor(PRODUCTS),
 			RandomListUtil.getRandomStringFor(COVERS),
-			RandomUtils.nextInt(0, testCase == 1 ? 300 : 301),
+			RandomUtils.nextInt(0, 300),
 			RandomUtils.nextInt(1, 5));
 	}
 
