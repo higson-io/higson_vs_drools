@@ -15,11 +15,17 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    droolsVersion = '7.23.0.Final'
+}
+
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.h2database:h2:1.4.196'
     implementation 'pl.decerto:hyperon-runtime:1.6.52'
+    implementation "org.drools:drools-core:$droolsVersion"
+    implementation "org.drools:drools-compiler:$droolsVersion"
+    implementation "org.drools:drools-decisiontables:$droolsVersion"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
