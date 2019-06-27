@@ -26,7 +26,7 @@ public class HyperonCalculation extends CalculationTemplate {
 	}
 
 	protected BigDecimal getFactor() {
-		FactorInput input = FactorInput.random(testCase);
+		FactorInput input = FactorInput.random();
 
 		HyperonContext context = new HyperonContext()
 			.set("policy.productCode", input.getProduct())
