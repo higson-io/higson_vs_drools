@@ -2,11 +2,9 @@ package pl.decerto.hyperon;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import pl.decerto.hyperon.runtime.core.HyperonEngine;
 import pl.decerto.hyperon.runtime.core.HyperonEngineFactory;
@@ -15,14 +13,6 @@ import pl.decerto.hyperon.runtime.sql.DialectTemplate;
 
 @Configuration
 public class HyperonIntegrationConfiguration {
-
-	private final Environment env;
-
-	@Autowired
-	public HyperonIntegrationConfiguration(Environment env) {
-		this.env = env;
-	}
-
 	@Bean
 	HyperonEngineFactory hyperonEngineFactory(HikariDataSource dataSource) {
 		HyperonEngineFactory hyperonEngineFactory = new HyperonEngineFactory();
@@ -37,11 +27,15 @@ public class HyperonIntegrationConfiguration {
 	}
 
 	@Bean(destroyMethod = "close")
-	HikariDataSource getHyperonDataSource(DialectTemplate dialectTemplate) {
+	HikariDataSource getHyperonDataSource(DialectTemplate dialectTemplate,
+		@Value("${hyperon.database.username:sa}") String userName,
+		@Value("${hyperon.database.password:sa}") String password,
+		@Value("${hyperon.database.url:h2}") String url) {
+
 		HikariDataSource dataSource = new HikariDataSource();
-		dataSource.setUsername(env.getProperty("hyperon.database.username"));
-		dataSource.setPassword(env.getProperty("hyperon.database.password"));
-		dataSource.setJdbcUrl(env.getProperty("hyperon.database.url"));
+		dataSource.setUsername(userName);
+		dataSource.setPassword(password);
+		dataSource.setJdbcUrl(url);
 		dataSource.setDriverClassName(dialectTemplate.getJdbcDriverClassName());
 		return dataSource;
 	}
