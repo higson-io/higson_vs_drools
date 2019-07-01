@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(":calculation")
+    implementation 'org.openjdk.jmh:jmh-core:1.21'
+    implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
+    implementation 'org.apache.commons:commons-dbcp2:2.6.0'
+    implementation 'com.h2database:h2:1.4.196'
+}
