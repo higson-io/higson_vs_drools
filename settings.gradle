@@ -4,3 +4,7 @@ pluginManagement {
     }
 }
 rootProject.name = 'hyperon-vs-drools'
+include 'jmh'
+include 'calculation'
+include 'spring-calculation'
+

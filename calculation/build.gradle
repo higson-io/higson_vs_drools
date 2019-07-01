@@ -1,0 +1,12 @@
+ext {
+    droolsVersion = '7.23.0.Final'
+}
+
+dependencies {
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    api 'pl.decerto:hyperon-runtime:1.6.52'
+    api "org.drools:drools-core:$droolsVersion"
+    api "org.drools:drools-compiler:$droolsVersion"
+    api "org.drools:drools-decisiontables:$droolsVersion"
+
+}
