@@ -1,10 +1,7 @@
 package pl.decerto.jmh.hyperon;
 
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -19,12 +16,12 @@ import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
 
 import pl.decerto.hyperon.HyperonCalculation;
-import pl.decerto.hyperon.runtime.core.HyperonEngineFactory;
+import pl.decerto.hyperon.runtime.core.HyperonEngine;
 
 /**
  * @author Maciej Główka on 27.06.2019
  */
-public class HyperonJmhBenchmark {
+public class HyperonThroughputJmhBenchmark {
 
 	@State(Scope.Benchmark)
 	public static class HyperonTestState {
@@ -33,17 +30,8 @@ public class HyperonJmhBenchmark {
 		@Setup(Level.Trial)
 		public void setup() {
 			try {
-				DriverManager.registerDriver((Driver) Class.forName("org.h2.Driver").getDeclaredConstructor().newInstance());
-				BasicDataSource ds = new BasicDataSource();
-				ds.setUrl("jdbc:h2:./db/hyperon;AUTO_SERVER=TRUE;MVCC=TRUE;IFEXISTS=TRUE");
-				ds.setUsername("sa");
-				ds.setPassword("sa");
-
-				HyperonEngineFactory factory = new HyperonEngineFactory();
-
-				factory.setDataSource(ds);
-
-				hyperonCalculation = new HyperonCalculation(factory.create(), 1);
+				HyperonEngine engine = ConfigurationUtils.createEngine();
+				hyperonCalculation = new HyperonCalculation(engine, 2);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -52,12 +40,12 @@ public class HyperonJmhBenchmark {
 
 	@Fork(2)
 	@Benchmark
-	@BenchmarkMode(Mode.AverageTime)
+	@BenchmarkMode(Mode.Throughput)
 	@OutputTimeUnit(TimeUnit.SECONDS)
-	@Warmup(iterations = 10, time = 1)
-	@Measurement(iterations = 20, time = 1)
+	@Warmup(iterations = 20, time = 1)
+	@Measurement(iterations = 40, time = 1)
 	public void calculationTest(HyperonTestState state, Blackhole blackhole) {
 		HyperonCalculation hyperonCalculation = state.hyperonCalculation;
-		blackhole.consume(hyperonCalculation.runMassiveCalculations(100000));
+		blackhole.consume(hyperonCalculation.runMassiveCalculations());
 	}
 }
