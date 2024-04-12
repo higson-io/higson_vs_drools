@@ -1,7 +1,7 @@
-# Hyperon vs Drools comparison
+# Higson vs Drools comparison
 
 hyperon and drools comparison sample project.
-To read more about Hyperon, please go [here](https://hyperon.io).
+To read more about Hyperon, please go [here](https://higson.io).
 To read more about Drools, please go [here](http://drools.org)
 
 ## Prerequisites
